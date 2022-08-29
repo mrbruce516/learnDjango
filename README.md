@@ -5,14 +5,14 @@ Django学习用项目
 ## 项目文件介绍
 
 ```shell
-djangoProject
+工程文件夹(本项目根目录)
 ├── manage.py              # 项目的管理、启动项目、创建app、数据管理 【不要动】【经常用】
-├── djangoProject
-		├── __init__.py
-		├── urls.py            # url和函数的对应关系  【经常修改】
-		├── settings.py        # 项目的配置文件      【经常修改】
-		├── asgi.py            # 接收网络请求 【不要动】
-		└── wsgi.py            # 接收网络请求 【不要动】
+├── 项目文件夹(创建项目名称时建立的文件夹，这里是ems)
+    ├── __init__.py
+    ├── urls.py            # url和函数的对应关系  【经常修改】
+    ├── settings.py        # 项目的配置文件      【经常修改】
+    ├── asgi.py            # 接收网络请求 【不要动】
+    └── wsgi.py            # 接收网络请求 【不要动】
 ```
 
 ## 课程地址
