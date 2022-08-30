@@ -19,7 +19,7 @@
             <table class="table table-bordered">
                 <thead>
                 <tr>
-                    <th>ID</th>
+                    <th>序号</th>
                     <th>部门名称</th>
                     <th>操作</th>
                 </tr>
@@ -27,7 +27,7 @@
                 <tbody>
                 {% for obj in depart %}
                     <tr>
-                        <th>{{ obj.id }}</th>
+                        <td>{{ forloop.counter }}</td>
                         <td>{{ obj.title }}</td>
                         <td>
                             <a class="btn btn-primary btn-xs" href="/depart/{{ obj.id }}/edit/">编辑</a>
