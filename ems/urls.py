@@ -15,25 +15,24 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from web import views
+from web.views import depart, user, pnum
 
 urlpatterns = [
-    # path('admin/', admin.site.urls),
     # 部门管理
-    path('depart/list/', views.depart_list),
-    path('depart/add/', views.depart_add),
-    path('depart/del/', views.depart_del),
-    path('depart/<uuid:nid>/edit/', views.depart_edit),
+    path('depart/list/', depart.depart_list),
+    path('depart/add/', depart.depart_add),
+    path('depart/del/', depart.depart_del),
+    path('depart/<uuid:nid>/edit/', depart.depart_edit),
 
     # 用户管理
-    path('user/list/', views.user_list),
-    path('user/add/', views.user_add),
-    path('user/del/', views.user_del),
-    path('user/<uuid:nid>/edit/', views.user_edit),
+    path('user/list/', user.user_list),
+    path('user/add/', user.user_add),
+    path('user/del/', user.user_del),
+    path('user/<uuid:nid>/edit/', user.user_edit),
 
     # 靓号管理
-    path('pnum/list/', views.pnum_list),
-    path('pnum/add/', views.pnum_add),
-    path('pnum/<uuid:nid>/edit/', views.pnum_edit),
-    path('pnum/del/', views.pnum_del),
+    path('pnum/list/', pnum.pnum_list),
+    path('pnum/add/', pnum.pnum_add),
+    path('pnum/<uuid:nid>/edit/', pnum.pnum_edit),
+    path('pnum/del/', pnum.pnum_del),
 ]
