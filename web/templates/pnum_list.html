@@ -30,7 +30,7 @@
             <table class="table table-bordered">
                 <thead>
                 <tr>
-                    <th>id</th>
+                    <th>序号</th>
                     <th>靓号</th>
                     <th>等级</th>
                     <th>价格</th>
@@ -41,7 +41,7 @@
                 <tbody>
                 {% for obj in queryset %}
                     <tr>
-                        <td>{{ obj.id }}</td>
+                        <td>{{ forloop.counter }}</td>
                         <td>{{ obj.mobile }}</td>
                         <td>{{ obj.get_level_display }}</td>
                         <td>{{ obj.price }}</td>
