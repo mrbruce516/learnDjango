@@ -42,3 +42,19 @@ def user_del(request):
     models.UserInfo.objects.filter(id=nid).delete()
     return redirect('/user/list/')
 
+
+def user_edit(request, nid):
+    row_obj = models.UserInfo.objects.filter(id=nid).first()
+    if request.method == 'GET':
+        # 根据id获取该用户所有信息
+        # 把该用户信息带入编辑框
+        form = UserModelForm(instance=row_obj)
+        return render(request, 'user_edit.html', {'form': form})
+
+    # 校验用户提交的信息是否合法
+    form = UserModelForm(data=request.POST, instance=row_obj)
+    if form.is_valid():
+        form.save()
+        return redirect('/user/list/')
+    else:
+        return render(request, "user_edit.html", {'form': form})
