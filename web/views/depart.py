@@ -3,6 +3,7 @@
 from django.shortcuts import render, redirect
 from web import models
 from web.utils.pagination import Pagination
+from web.utils.search import Search
 
 
 # Create your views here.
@@ -10,13 +11,17 @@ from web.utils.pagination import Pagination
 def depart_list(request):
     """ 部门管理中心 """
 
+    query_title = Search(request, field_rule="title__contains")
+
     # 去数据库中获取所有部门信息
-    depart = models.Department.objects.all()
+    depart = models.Department.objects.filter(**query_title.data_dict)
 
     page_obj = Pagination(request, queryset=depart)
 
     context = {
+        'search': query_title.search,
         'depart': page_obj.page_queryset,
+        'placeholder': "查找部门",
         'page_number': page_obj.html()
     }
 

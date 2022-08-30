@@ -50,7 +50,21 @@
 </nav>
 
 <div>
-{% block content %}{% endblock %}
+    <div class="container">
+        <div style="float: right;width: 300px">
+            <form method="get">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="q" placeholder={{ placeholder }} value={{ search }}>
+                    <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+                            </button>
+                        </span>
+                </div><!-- /input-group -->
+            </form>
+        </div>
+        {% block content %}{% endblock %}
+    </div>
 </div>
 
 <script src="{% static 'js/jquery-3.6.0.min.js' %}"></script>

@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from web import models
 from web.utils.pagination import Pagination
 from web.utils.form import PnumModelForm, PnumEditModelForm
+from web.utils.search import Search
 
 
 # Create your views here.
@@ -13,19 +14,16 @@ def pnum_list(request):
     # for i in range(300):
     #     models.PrettyNum.objects.create(mobile="18173465432", level=1)
 
-    # 搜索
-    data_dict = {}
-    search_mobile = request.GET.get('q', '')
-    if search_mobile:
-        data_dict["mobile__contains"] = search_mobile
+    data_dict = Search(request, field_rule="mobile__contains")
 
-    queryset = models.PrettyNum.objects.filter(**data_dict).order_by("-price")
+    queryset = models.PrettyNum.objects.filter(**data_dict.data_dict).order_by("-price")
 
     # 实例化Pagination类，传入查询参数
     page_obj = Pagination(request, queryset)
 
     context = {
-        'search_mobile': search_mobile,
+        'search': data_dict.search,
+        'placeholder': "查找手机号",
         'queryset': page_obj.page_queryset,  # 列表数据
         'page_number': page_obj.html()  # 分页功能
     }

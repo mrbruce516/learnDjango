@@ -4,16 +4,22 @@ from django.shortcuts import render, redirect
 from web import models
 from web.utils.pagination import Pagination
 from web.utils.form import UserModelForm
+from web.utils.search import Search
 
 
 # Create your views here.
 
 def user_list(request):
-    queryset = models.UserInfo.objects.all()
+
+    query_account = Search(request, field_rule="account__contains")
+
+    queryset = models.UserInfo.objects.filter(**query_account.data_dict)
 
     page_obj = Pagination(request, queryset)
 
     context = {
+        'search': query_account.search,
+        'placeholder': "查找用户名",
         'queryset': page_obj.page_queryset,
         'page_number': page_obj.html()
     }
