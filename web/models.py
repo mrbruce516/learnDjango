@@ -28,6 +28,11 @@ class UserInfo(models.Model):
     create_time = models.DateTimeField(verbose_name="创建时间", default=datetime.now)
     # 级联删除
     depart = models.ForeignKey(verbose_name="部门", to="Department", to_field="id", on_delete=models.CASCADE)
+    admin_choice = (
+        (0, "否"),
+        (1, "是")
+    )
+    admin = models.PositiveSmallIntegerField(verbose_name="管理员", choices=admin_choice)
 
 
 class PrettyNum(models.Model):

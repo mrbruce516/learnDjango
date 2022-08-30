@@ -12,7 +12,7 @@ class UserModelForm(BootStrapModelForm):
 
     class Meta:
         model = models.UserInfo
-        fields = ["name", "gender", "pwd", "depart", "create_time"]
+        fields = ["name", "gender", "pwd", "depart", "create_time", "admin"]
 
 
 # 添加靓号表单，pnum_add 使用
