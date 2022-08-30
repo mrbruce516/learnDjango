@@ -17,6 +17,7 @@ class Department(models.Model):
 class UserInfo(models.Model):
     """ 员工表 """
     id = models.UUIDField(verbose_name="id", primary_key=True, default=uuid.uuid4, editable=False, unique=True)
+    account = models.CharField(verbose_name="用户名", max_length=16)
     name = models.CharField(verbose_name="姓名", max_length=16)
     gender_choice = (
         (1, "男"),
