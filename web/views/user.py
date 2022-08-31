@@ -3,7 +3,7 @@
 from django.shortcuts import render, redirect
 from web import models
 from web.utils.pagination import Pagination
-from web.utils.form import UserModelForm
+from web.utils.form import UserModelForm, LoginForm
 from web.utils.search import Search
 
 
@@ -44,7 +44,7 @@ def user_add(request):
     else:
         context = {
             'title': "新建用户",
-            'form': UserModelForm(),
+            'form': form,
         }
         return render(request, "add.html", context)
 
@@ -65,7 +65,6 @@ def user_edit(request, nid):
             'form': UserModelForm(instance=row_obj)
         }
         return render(request, 'edit.html', context)
-
     # 校验用户提交的信息是否合法
     form = UserModelForm(data=request.POST, instance=row_obj)
     if form.is_valid():
@@ -77,3 +76,26 @@ def user_edit(request, nid):
             'form': form
         }
         return render(request, "edit.html", context)
+
+
+def login(request):
+    """登陆功能"""
+    if request.GET == "GET":
+        form = LoginForm()
+        context = {
+            'form': form
+        }
+        return render(request, 'login.html', context)
+    form = LoginForm(data=request.POST)
+    if form.is_valid():
+        print(form.cleaned_data)
+    context = {
+        'form': form
+    }
+    return render(request, 'login.html', context)
+
+
+
+
+
+
