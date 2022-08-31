@@ -21,7 +21,6 @@
                 <th>用户名</th>
                 <th>姓名</th>
                 <th>性别</th>
-                <th>密码</th>
                 <th>所属部门</th>
                 <th>账户余额</th>
                 <th>入职时间</th>
@@ -36,7 +35,6 @@
                     <td>{{ obj.account }}</td>
                     <td>{{ obj.name }}</td>
                     <td>{{ obj.get_gender_display }}</td>
-                    <td>{{ obj.pwd }}</td>
                     <td>{{ obj.depart.title }}</td>
                     <td>{{ obj.balance }}</td>
                     <td>{{ obj.create_time|date:'Y-m-d' }}</td>

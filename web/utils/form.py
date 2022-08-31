@@ -1,12 +1,13 @@
 from django import forms
 from django.core.validators import RegexValidator
 from django.core.validators import ValidationError
-from web.utils.bsmodelform import BootStrapModelForm
 from web import models
+from web.utils.encrpty import md5
+from web.utils.bsmodelform import BootStrapModelForm
 
 
-# 部门表单
 class DepartModelForm(BootStrapModelForm):
+    """部门表单"""
     title = forms.CharField(min_length=3, label='部门名称')
 
     class Meta:
@@ -14,18 +15,31 @@ class DepartModelForm(BootStrapModelForm):
         fields = ["title"]
 
 
-# 用户表单, user_add, user_edit 使用
 class UserModelForm(BootStrapModelForm):
+    """用户表单"""
+    # 这里定义规则与插件
     name = forms.CharField(min_length=2, label='姓名')
-    pwd = forms.CharField(min_length=6, label='密码')
+    pwd = forms.CharField(min_length=6, label='密码', widget=forms.PasswordInput)
+    confirm_pwd = forms.CharField(min_length=6, label='确认密码', widget=forms.PasswordInput)
 
     class Meta:
         model = models.UserInfo
-        fields = ["account", "name", "gender", "pwd", "depart", "create_time", "admin"]
+        fields = ["account", "name", "gender", "pwd", "confirm_pwd", "depart", "create_time", "admin"]
+
+    def clean_pwd(self):
+        pwd = self.cleaned_data.get("pwd")
+        return md5(pwd)
+
+    def clean_confirm_pwd(self):
+        pwd = self.cleaned_data.get("pwd")
+        confirm = md5(self.cleaned_data.get("confirm_pwd"))
+        if pwd != confirm:
+            raise ValidationError("密码不一致")
+        return confirm
 
 
-# 添加靓号表单，pnum_add 使用
 class PnumModelForm(BootStrapModelForm):
+    """靓号表单"""
     mobile = forms.CharField(
         label='号码',
         validators=[RegexValidator(r'^1[3-9]\d{9}$', '手机号格式错误')]
@@ -46,8 +60,8 @@ class PnumModelForm(BootStrapModelForm):
         return txt_mobile
 
 
-# 编辑靓号表单，pnum_edit 使用
 class PnumEditModelForm(BootStrapModelForm):
+    """编辑靓号表单"""
     mobile = forms.CharField(
         label='号码',
         validators=[RegexValidator(r'^1[3-9]\d{9}$', '手机号格式错误')]
@@ -69,3 +83,23 @@ class PnumEditModelForm(BootStrapModelForm):
         if exists:
             raise ValidationError("该手机号已存在")
         return txt_mobile
+
+
+"""
+登陆校验功能(form版本)
+    class LoginForm(forms.Form):
+    username = forms.CharField(
+        label="用户名",
+        widget=forms.TextInput
+    )
+    password = forms.CharField(
+        label="密码",
+        widget=forms.PasswordInput
+    )
+"""
+
+
+class LoginForm(BootStrapModelForm):
+    class Meta:
+        model = models.UserInfo
+        fields = ["account", "pwd"]
