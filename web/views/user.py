@@ -32,7 +32,7 @@ def user_add(request):
             'title': "新建用户",
             'form': UserModelForm(),
         }
-        return render(request, "layout_add.html", context)
+        return render(request, "add.html", context)
 
     # 校验用户提交的信息是否合法
     form = UserModelForm(data=request.POST)
@@ -46,7 +46,7 @@ def user_add(request):
             'title': "新建用户",
             'form': UserModelForm(),
         }
-        return render(request, "layout_add.html", context)
+        return render(request, "add.html", context)
 
 
 def user_del(request):
@@ -60,8 +60,11 @@ def user_edit(request, nid):
     if request.method == 'GET':
         # 根据id获取该用户所有信息
         # 把该用户信息带入编辑框
-        form = UserModelForm(instance=row_obj)
-        return render(request, 'user_edit.html', {'form': form})
+        context = {
+            'title': "编辑用户",
+            'form': UserModelForm(instance=row_obj)
+        }
+        return render(request, 'edit.html', context)
 
     # 校验用户提交的信息是否合法
     form = UserModelForm(data=request.POST, instance=row_obj)
@@ -69,4 +72,8 @@ def user_edit(request, nid):
         form.save()
         return redirect('/user/list/')
     else:
-        return render(request, "user_edit.html", {'form': form})
+        context = {
+            'title': "编辑用户",
+            'form': form
+        }
+        return render(request, "edit.html", context)

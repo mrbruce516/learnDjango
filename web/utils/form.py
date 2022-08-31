@@ -1,8 +1,8 @@
 from django import forms
-from web import models
 from django.core.validators import RegexValidator
 from django.core.validators import ValidationError
 from web.utils.bsmodelform import BootStrapModelForm
+from web import models
 
 
 # 部门表单

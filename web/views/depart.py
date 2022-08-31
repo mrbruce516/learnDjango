@@ -30,13 +30,12 @@ def depart_list(request):
 
 
 def depart_add(request):
-
     if request.method == 'GET':
         context = {
             'title': "新增部门",
             'form': DepartModelForm()
         }
-        return render(request, 'layout_add.html', context)
+        return render(request, 'add.html', context)
 
     form = DepartModelForm(data=request.POST)
     context = {
@@ -47,7 +46,7 @@ def depart_add(request):
         form.save()
         # 重定向回主页面
         return redirect("/depart/list/")
-    return render(request, 'layout_add.html', context)
+    return render(request, 'add.html', context)
 
 
 def depart_del(request):
@@ -57,11 +56,22 @@ def depart_del(request):
 
 
 def depart_edit(request, nid):
+    row_obj = models.Department.objects.filter(id=nid).first()
     if request.method == 'GET':
-        depart = models.Department.objects.filter(id=nid)
-        return render(request, "depart_edit.html", {'depart': depart})
+        context = {
+            'title': "编辑部门",
+            'form': DepartModelForm(instance=row_obj)
+        }
+        return render(request, "edit.html", context)
 
     # 获取数据并更新
-    title = request.POST.get("title")
-    models.Department.objects.filter(id=nid).update(title=title)
-    return redirect("/depart/list/")
+    form = DepartModelForm(data=request.POST, instance=row_obj)
+    if form.is_valid():
+        form.save()
+        return redirect('/depart/list/')
+    else:
+        context = {
+            'title': "编辑部门",
+            'form': form
+        }
+        return render(request, "edit.html", context)

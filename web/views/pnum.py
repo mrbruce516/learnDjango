@@ -37,7 +37,7 @@ def pnum_add(request):
             'title': "新建靓号",
             'form': PnumModelForm()
         }
-        return render(request, 'layout_add.html', context)
+        return render(request, 'add.html', context)
 
     # 校验用户提交的信息是否合法
     form = PnumModelForm(data=request.POST)
@@ -50,7 +50,7 @@ def pnum_add(request):
         'title': "新建靓号",
         'form': form
     }
-    return render(request, "layout_add.html", context)
+    return render(request, "add.html", context)
 
 
 def pnum_edit(request, nid):
@@ -58,15 +58,22 @@ def pnum_edit(request, nid):
     if request.method == 'GET':
         # 根据id获取该用户所有信息
         # 把该用户信息带入编辑框
-        form = PnumEditModelForm(instance=row_obj)
-        return render(request, 'pnum_edit.html', {'form': form})
+        context = {
+            'title': "编辑靓号",
+            'form': PnumEditModelForm(instance=row_obj)
+        }
+        return render(request, 'edit.html', context)
 
     # 校验用户提交的信息是否合法
     form = PnumEditModelForm(data=request.POST, instance=row_obj)
     if form.is_valid():
         form.save()
         return redirect('/pnum/list/')
-    return render(request, "pnum_edit.html", {'form': form})
+    context = {
+        'title': "编辑靓号",
+        'form': form
+    }
+    return render(request, "edit.html", context)
 
 
 def pnum_del(request):
