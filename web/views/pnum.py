@@ -33,8 +33,11 @@ def pnum_list(request):
 
 def pnum_add(request):
     if request.method == 'GET':
-        form = PnumModelForm()
-        return render(request, 'pnum_add.html', {'form': form})
+        context = {
+            'title': "新建靓号",
+            'form': PnumModelForm()
+        }
+        return render(request, 'layout_add.html', context)
 
     # 校验用户提交的信息是否合法
     form = PnumModelForm(data=request.POST)
@@ -43,7 +46,11 @@ def pnum_add(request):
         # print(form.cleaned_data)
         form.save()
         return redirect('/pnum/list/')
-    return render(request, "pnum_add.html", {'form': form})
+    context = {
+        'title': "新建靓号",
+        'form': form
+    }
+    return render(request, "layout_add.html", context)
 
 
 def pnum_edit(request, nid):

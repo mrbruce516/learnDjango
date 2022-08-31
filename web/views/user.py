@@ -10,7 +10,6 @@ from web.utils.search import Search
 # Create your views here.
 
 def user_list(request):
-
     query_account = Search(request, field_rule="account__contains")
 
     queryset = models.UserInfo.objects.filter(**query_account.data_dict)
@@ -29,8 +28,11 @@ def user_list(request):
 
 def user_add(request):
     if request.method == 'GET':
-        form = UserModelForm()
-        return render(request, "user_add.html", {'form': form})
+        context = {
+            'title': "新建用户",
+            'form': UserModelForm(),
+        }
+        return render(request, "layout_add.html", context)
 
     # 校验用户提交的信息是否合法
     form = UserModelForm(data=request.POST)
@@ -40,7 +42,11 @@ def user_add(request):
         form.save()
         return redirect('/user/list/')
     else:
-        return render(request, "user_add.html", {'form': form})
+        context = {
+            'title': "新建用户",
+            'form': UserModelForm(),
+        }
+        return render(request, "layout_add.html", context)
 
 
 def user_del(request):

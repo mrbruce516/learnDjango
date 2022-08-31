@@ -5,6 +5,15 @@ from django.core.validators import ValidationError
 from web.utils.bsmodelform import BootStrapModelForm
 
 
+# 部门表单
+class DepartModelForm(BootStrapModelForm):
+    title = forms.CharField(min_length=3, label='部门名称')
+
+    class Meta:
+        model = models.Department
+        fields = ["title"]
+
+
 # 用户表单, user_add, user_edit 使用
 class UserModelForm(BootStrapModelForm):
     name = forms.CharField(min_length=2, label='姓名')

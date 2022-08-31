@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from web import models
 from web.utils.pagination import Pagination
 from web.utils.search import Search
+from web.utils.form import DepartModelForm
 
 
 # Create your views here.
@@ -29,17 +30,24 @@ def depart_list(request):
 
 
 def depart_add(request):
+
     if request.method == 'GET':
-        return render(request, 'depart_add.html')
+        context = {
+            'title': "新增部门",
+            'form': DepartModelForm()
+        }
+        return render(request, 'layout_add.html', context)
 
-    # 获取用户提交的数据
-    title = request.POST.get("title")
-
-    # 保存到数据库
-    models.Department.objects.create(title=title)
-
-    # 重定向回主页面
-    return redirect("/depart/list/")
+    form = DepartModelForm(data=request.POST)
+    context = {
+        'title': "新增部门",
+        'form': form
+    }
+    if form.is_valid():
+        form.save()
+        # 重定向回主页面
+        return redirect("/depart/list/")
+    return render(request, 'layout_add.html', context)
 
 
 def depart_del(request):
