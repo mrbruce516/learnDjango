@@ -31,6 +31,7 @@ urlpatterns = [
     path('user/<uuid:nid>/edit/', user.user_edit),
     path('login/', user.login),
     path('logout/', user.logout),
+    path('login/verify/', user.login_verify),
 
     # 靓号管理
     path('pnum/list/', pnum.pnum_list),

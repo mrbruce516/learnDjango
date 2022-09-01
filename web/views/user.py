@@ -1,10 +1,13 @@
 # 用户管理视图
 
+from io import BytesIO
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from web import models
+from web.utils.search import Search
+from web.utils.verify import check_code
 from web.utils.pagination import Pagination
 from web.utils.form import UserModelForm, UserEditModelForm, LoginForm
-from web.utils.search import Search
 
 
 # Create your views here.
@@ -102,6 +105,16 @@ def login(request):
         }
         return redirect("/user/list/")
     return render(request, 'login.html', context)
+
+
+def login_verify(request):
+    """生成图片验证码"""
+    img, code_str = check_code()
+
+    stream = BytesIO()
+    img.save(stream, 'png')
+
+    return HttpResponse(stream.getvalue())
 
 
 def logout(request):

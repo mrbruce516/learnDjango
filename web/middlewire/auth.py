@@ -7,7 +7,7 @@ class AuthMiddleware(MiddlewareMixin):
 
     def process_request(self, request):
         # 排除不需要登陆的页面
-        if request.path_info == "/login/":
+        if request.path_info in ["/login/", "/login/verify/"]:
             return
 
         login_info = request.session.get("login_info")
