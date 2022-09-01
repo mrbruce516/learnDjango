@@ -80,7 +80,7 @@ def user_edit(request, nid):
 
 def login(request):
     """登陆功能"""
-    if request.GET == "GET":
+    if request.method == "GET":
         form = LoginForm()
         context = {
             'form': form
@@ -96,6 +96,15 @@ def login(request):
             form.add_error("pwd", "用户名或密码错误")
             return render(request, 'login.html', context)
         # 用户密码输入正确，写入用户浏览器cookie中，在写入服务端session中
-        request.session["login_info"] = login_data.account
-        return redirect("/user/list")
+        request.session["login_info"] = {
+            'account': login_data.account,
+            'name': login_data.name
+        }
+        return redirect("/user/list/")
     return render(request, 'login.html', context)
+
+
+def logout(request):
+    """注销功能"""
+    request.session.clear()
+    return redirect('/login/')
