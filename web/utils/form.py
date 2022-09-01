@@ -18,6 +18,7 @@ class DepartModelForm(BootStrapModelForm):
 class UserModelForm(BootStrapModelForm):
     """用户表单"""
     # 这里定义规则与插件
+    account = forms.CharField(label="用户名")
     name = forms.CharField(min_length=2, label='姓名')
     pwd = forms.CharField(min_length=6, label='密码', widget=forms.PasswordInput)
     confirm_pwd = forms.CharField(min_length=6, label='确认密码', widget=forms.PasswordInput)
@@ -25,6 +26,47 @@ class UserModelForm(BootStrapModelForm):
     class Meta:
         model = models.UserInfo
         fields = ["account", "name", "gender", "pwd", "confirm_pwd", "depart", "create_time", "admin"]
+
+    def clean_account(self):
+        account = self.cleaned_data["account"]
+
+        exist = models.UserInfo.objects.filter(account=account).exists()
+        if exist:
+            raise ValidationError("此用户名已存在")
+        return account
+
+    def clean_pwd(self):
+        pwd = self.cleaned_data.get("pwd")
+        return md5(pwd)
+
+    def clean_confirm_pwd(self):
+        pwd = self.cleaned_data.get("pwd")
+        confirm = md5(self.cleaned_data.get("confirm_pwd"))
+        if pwd != confirm:
+            raise ValidationError("密码不一致")
+        return confirm
+
+
+class UserEditModelForm(BootStrapModelForm):
+    """编辑用户表单"""
+    # 这里定义规则与插件
+    account = forms.CharField(label="用户名")
+    name = forms.CharField(min_length=2, label='姓名')
+    pwd = forms.CharField(min_length=6, label='密码', widget=forms.PasswordInput)
+    confirm_pwd = forms.CharField(min_length=6, label='确认密码', widget=forms.PasswordInput)
+
+    class Meta:
+        model = models.UserInfo
+        fields = ["account", "name", "gender", "pwd", "confirm_pwd", "depart", "create_time", "admin"]
+
+    def clean_account(self):
+        account = self.cleaned_data["account"]
+        user_id = self.instance.pk
+
+        exist = models.UserInfo.objects.filter(account=account).exclude(id=user_id).exists()
+        if exist:
+            raise ValidationError("此用户名已存在")
+        return account
 
     def clean_pwd(self):
         pwd = self.cleaned_data.get("pwd")

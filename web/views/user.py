@@ -3,7 +3,7 @@
 from django.shortcuts import render, redirect
 from web import models
 from web.utils.pagination import Pagination
-from web.utils.form import UserModelForm, LoginForm
+from web.utils.form import UserModelForm, UserEditModelForm, LoginForm
 from web.utils.search import Search
 
 
@@ -62,11 +62,11 @@ def user_edit(request, nid):
         # 把该用户信息带入编辑框
         context = {
             'title': "编辑用户",
-            'form': UserModelForm(instance=row_obj)
+            'form': UserEditModelForm(instance=row_obj)
         }
         return render(request, 'edit.html', context)
     # 校验用户提交的信息是否合法
-    form = UserModelForm(data=request.POST, instance=row_obj)
+    form = UserEditModelForm(data=request.POST, instance=row_obj)
     if form.is_valid():
         form.save()
         return redirect('/user/list/')
