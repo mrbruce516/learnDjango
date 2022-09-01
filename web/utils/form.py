@@ -100,6 +100,15 @@ class PnumEditModelForm(BootStrapModelForm):
 
 
 class LoginForm(BootStrapModelForm):
+    pwd = forms.CharField(
+        label="密码",
+        widget=forms.PasswordInput
+    )
+
     class Meta:
         model = models.UserInfo
         fields = ["account", "pwd"]
+
+    def clean_pwd(self):
+        pwd = self.cleaned_data.get("pwd")
+        return md5(pwd)
