@@ -94,6 +94,14 @@ def login(request):
         'form': form
     }
     if form.is_valid():
+
+        # 先认证验证码
+        verify_code = form.cleaned_data.pop('verify_code')
+        real_code = request.session.get('login_verify', "")
+        if verify_code.upper() != real_code.upper():
+            form.add_error("verify_code", "验证码输入错误")
+            return render(request, 'login.html', context)
+
         login_data = models.UserInfo.objects.filter(**form.cleaned_data).first()
         if not login_data:
             form.add_error("pwd", "用户名或密码错误")
@@ -103,6 +111,8 @@ def login(request):
             'account': login_data.account,
             'name': login_data.name
         }
+        # 7天免登陆
+        request.session.set_expiry(60 * 60 * 24 * 7)
         return redirect("/user/list/")
     return render(request, 'login.html', context)
 
@@ -110,6 +120,11 @@ def login(request):
 def login_verify(request):
     """生成图片验证码"""
     img, code_str = check_code()
+
+    # 写入验证码到session中
+    request.session['login_verify'] = code_str
+    # 设定超时时间（秒）
+    request.session.set_expiry(60)
 
     stream = BytesIO()
     img.save(stream, 'png')

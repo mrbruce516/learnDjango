@@ -147,6 +147,10 @@ class LoginForm(BootStrapModelForm):
         widget=forms.PasswordInput
     )
 
+    verify_code = forms.CharField(
+        label="验证码",
+    )
+
     class Meta:
         model = models.UserInfo
         fields = ["account", "pwd"]
