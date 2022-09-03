@@ -35,6 +35,9 @@ class UserInfo(models.Model):
     )
     admin = models.PositiveSmallIntegerField(verbose_name="管理员", choices=admin_choice)
 
+    def __str__(self):
+        return self.name
+
 
 class PrettyNum(models.Model):
     """ 商品：靓号表 """
@@ -53,3 +56,17 @@ class PrettyNum(models.Model):
         (1, "启用"),
     )
     status = models.PositiveSmallIntegerField(verbose_name="状态", choices=status_choice, default=0)
+
+
+class Task(models.Model):
+    """ 任务列表 """
+    id = models.UUIDField(verbose_name="id", primary_key=True, default=uuid.uuid4, editable=False, unique=True)
+    level_choice = {
+        (1, "普通"),
+        (2, "重要"),
+        (3, "临时")
+    }
+    level = models.PositiveSmallIntegerField(verbose_name="级别", choices=level_choice, default=1)
+    title = models.CharField(verbose_name="标题", max_length=12)
+    detail = models.TextField(verbose_name="详细信息")
+    user = models.ForeignKey(verbose_name="负责人", to="UserInfo", on_delete=models.CASCADE)

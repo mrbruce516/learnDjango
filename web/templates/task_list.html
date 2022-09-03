@@ -1,0 +1,60 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div class="panel panel-default">
+        <div class="panel-heading">新建任务表单</div>
+        <div class="panel-body">
+            <form id="formAdd">
+                <div class="clearfix">
+                    {% for obj in form %}
+                        <div class="col-xs-6">
+                            <div class="form-group" style="position: relative;margin-bottom: 25px">
+                                <label>{{ obj.label }}</label>
+                                {{ obj }}
+                                <span class="error-msg" style="color: red; position: absolute;"></span>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div class="col-xs-12">
+                        <button id="btnAdd" type="button" class="btn btn-primary">提交</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        $(function () {
+            // 页面框架加载完成后代码自动执行
+            bindBtnAddEvent();
+
+        })
+
+        function bindBtnAddEvent() {
+            // 捕获点击按钮
+            $("#btnAdd").click(function () {
+                // 清空上一次提交的错误信息
+                $(".error-msg").empty();
+
+                $.ajax({
+                    url: '/task/add/',
+                    type: "post",
+                    data: $("#formAdd").serialize(),
+                    dataType: "JSON",
+                    success: function (res) {
+                        if (res.status) {
+                            alert("添加成功");
+                        } else {
+                            $.each(res.error, function (k, v) {
+                                // console.log(k, v);
+                                $("#id_" + k).next().text(v[0]);
+                            })
+                        }
+                    }
+                })
+            })
+        }
+    </script>
+{% endblock %}

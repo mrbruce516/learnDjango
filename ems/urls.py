@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from web.views import depart, user, pnum
+from web.views import depart, user, pnum, task
 
 urlpatterns = [
     # 部门管理
@@ -38,4 +38,8 @@ urlpatterns = [
     path('pnum/add/', pnum.pnum_add),
     path('pnum/<uuid:nid>/edit/', pnum.pnum_edit),
     path('pnum/del/', pnum.pnum_del),
+
+    # 任务管理
+    path('task/list/', task.task_list),
+    path('task/add/', task.task_add),
 ]
