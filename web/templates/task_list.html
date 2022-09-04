@@ -22,6 +22,45 @@
             </form>
         </div>
     </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+            已有任务
+        </div>
+
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>任务名称</th>
+                <th>任务级别</th>
+                <th>任务详情</th>
+                <th>指派给</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for obj in queryset %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ obj.title }}</td>
+                    <td>{{ obj.get_level_display }}</td>
+                    <td>{{ obj.detail }}</td>
+                    <td>{{ obj.user }}</td>
+                    <!-- 编辑操作 -->
+                    <td>
+                        <a class="btn btn-primary btn-xs" href="#">编辑</a>
+                        <a class="btn btn-danger btn-xs" href="#">删除</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <ul class="pagination" style="float: left;">
+            {{ page_number }}
+        </ul>
+    </div>
+
 {% endblock %}
 
 {% block js %}
@@ -46,6 +85,8 @@
                     success: function (res) {
                         if (res.status) {
                             alert("添加成功");
+                            // 用JS刷新页面，显示添加成功后的数据
+                            location.reload();
                         } else {
                             $.each(res.error, function (k, v) {
                                 // console.log(k, v);
