@@ -164,3 +164,11 @@ class TaskModelForm(BootStrapModelForm):
     class Meta:
         model = models.Task
         fields = "__all__"
+
+
+class OrderModelForm(BootStrapModelForm):
+    class Meta:
+        model = models.Order
+        # fields = "__all__"
+        exclude = ["oid"]
+
