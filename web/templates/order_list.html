@@ -1,0 +1,43 @@
+{% extends 'search.html' %}
+
+{% block content %}
+    <div>
+        <input id="btnAdd" type="button" value="新建订单" class="btn btn-primary">
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="newOrder" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        $(function () {
+            bindBtnAddEvent();
+        })
+
+        function bindBtnAddEvent() {
+            $("#btnAdd").click(function () {
+                // 点击新建按钮，显示对话框
+                $('#newOrder').modal('show');
+            });
+        }
+
+
+    </script>
+{% endblock %}
