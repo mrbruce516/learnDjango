@@ -170,5 +170,4 @@ class OrderModelForm(BootStrapModelForm):
     class Meta:
         model = models.Order
         # fields = "__all__"
-        exclude = ["oid"]
-
+        exclude = ["oid", "user"]

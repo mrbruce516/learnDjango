@@ -108,6 +108,7 @@ def login(request):
             return render(request, 'login.html', context)
         # 用户密码输入正确，写入用户浏览器cookie中，在写入服务端session中
         request.session["login_info"] = {
+            'id': login_data.id.hex,
             'account': login_data.account,
             'name': login_data.name
         }

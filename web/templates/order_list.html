@@ -1,10 +1,10 @@
 {% extends 'search.html' %}
 
 {% block content %}
-    <div>
+    <div style="margin-bottom: 10px">
         <input id="btnAdd" type="button" value="新建订单" class="btn btn-primary">
     </div>
-    <!-- Modal -->
+    <!-- 新建数据对话框 -->
     <div class="modal fade" id="newOrder" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -35,6 +35,61 @@
             </div>
         </div>
     </div>
+    <!-- 显示数据 -->
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+            订单列表
+        </div>
+
+        <!-- Table -->
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>序号</th>
+                <th>订单号</th>
+                <th>订单名称</th>
+                <th>价格</th>
+                <th>所属用户</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for obj in queryset %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ obj.oid }}</td>
+                    <td>{{ obj.title }}</td>
+                    <td>{{ obj.price }}</td>
+                    <td>{{ obj.user }}</td>
+                    <td>{{ obj.get_status_display }}</td>
+                    <td>
+                        <a class="btn btn-primary btn-xs" href="#">编辑</a>
+                        <input class="btn btn-danger btn-xs btn-del" type="button" value="删除">
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <!-- 删除对话框 -->
+    <div class="modal fade" id="delModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="alert alert-danger alert-dismissible fade in" role="alert">
+                <h4>是否删除此条数据？</h4>
+                <p style="text-align: right;">
+                    <button type="button" class="btn btn-danger">确 定</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
+                </p>
+            </div>
+        </div>
+    </div>
+    <!-- 分页组件 -->
+    <ul class="pagination" style="float: left;">
+        {{ page_number }}
+    </ul>
+
 {% endblock %}
 
 {% block js %}
@@ -42,6 +97,7 @@
         $(function () {
             bindBtnAddEvent();
             bindBtnSaveEvent();
+            bindBtnDelEvent();
         })
 
         function bindBtnAddEvent() {
@@ -62,7 +118,13 @@
                     success: function (res) {
                         // console.log(res)
                         if (res.status) {
-                            alert("创建成功");
+                            // alert("创建成功");
+                            // 清空表单数据
+                            $('#formAdd')[0].reset();
+                            // 关闭对话框
+                            $('#newOrder').modal('hide');
+                            // 刷新页面
+                            location.reload();
                         } else {
                             $.each(res.error, function (k, v) {
                                 $('#id_' + k).next().text(v[0]);
@@ -73,5 +135,11 @@
             });
         }
 
+        function bindBtnDelEvent() {
+            $('.btn-del').click(function () {
+                // alert("点击了删除");
+                $('#delModal').modal('show');
+            });
+        }
     </script>
 {% endblock %}
