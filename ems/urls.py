@@ -47,5 +47,6 @@ urlpatterns = [
     path('order/list/', order.order_list),
     path('order/add/', order.order_add),
     path('order/del/', order.order_del),
+    path('order/edit/', order.order_edit),
 
 ]

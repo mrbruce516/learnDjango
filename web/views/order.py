@@ -37,3 +37,15 @@ def order_del(request):
     uid = request.GET.get("uid")
     models.Order.objects.filter(id=uid).delete()
     return JsonResponse({'status': True})
+
+
+def order_edit(request):
+    uid = request.GET.get("uid")
+    row_dict = models.Order.objects.filter(id=uid).values("title", "price", "status").first()
+    if not row_dict:
+        return JsonResponse({"status": False, 'error': "数据不存在"})
+    result = {
+        'status': True,
+        'data': row_dict
+    }
+    return JsonResponse(result)
