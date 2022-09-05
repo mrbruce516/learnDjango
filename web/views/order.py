@@ -39,7 +39,7 @@ def order_del(request):
     return JsonResponse({'status': True})
 
 
-def order_edit(request):
+def order_detail(request):
     uid = request.GET.get("uid")
     row_dict = models.Order.objects.filter(id=uid).values("title", "price", "status").first()
     if not row_dict:
@@ -49,3 +49,16 @@ def order_edit(request):
         'data': row_dict
     }
     return JsonResponse(result)
+
+
+@csrf_exempt
+def order_edit(request):
+    uid = request.GET.get('uid')
+    row_obj = models.Order.objects.filter(id=uid).first()
+    if not row_obj:
+        return JsonResponse({"status": False, "tips": "数据不存在"})
+    form = OrderModelForm(data=request.POST, instance=row_obj)
+    if form.is_valid():
+        form.save()
+        return JsonResponse({"status": True})
+    return JsonResponse({"status": False, 'error': form.errors})

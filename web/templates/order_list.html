@@ -95,6 +95,7 @@
 {% block js %}
     <script type="text/javascript">
         var DELETE_ID;
+        var EDIT_ID;
 
         $(function () {
             bindBtnAddEvent();
@@ -106,6 +107,7 @@
 
         function bindBtnAddEvent() {
             $("#btnAdd").click(function () {
+                EDIT_ID = undefined;
                 // 修改标题
                 $('#myModalLabel').text("新建订单");
                 // 清空对话框中的数据
@@ -118,29 +120,66 @@
         function bindBtnSaveEvent() {
             $("#btnSave").click(function () {
                 $('.error-msg').empty();
-                $.ajax({
-                    url: "/order/add/",
-                    type: "post",
-                    data: $('#formAdd').serialize(),
-                    dataType: "JSON",
-                    success: function (res) {
-                        // console.log(res)
-                        if (res.status) {
-                            // alert("创建成功");
-                            // 清空表单数据
-                            $('#formAdd')[0].reset();
-                            // 关闭对话框
-                            $('#newOrder').modal('hide');
-                            // 刷新页面
-                            location.reload();
+                if (EDIT_ID) {
+                    doEdit();
+                } else {
+                    doAdd();
+                }
+            });
+        }
+
+        function doEdit() {
+            $.ajax({
+                url: "/order/edit/?uid=" + EDIT_ID,
+                type: "post",
+                data: $('#formAdd').serialize(),
+                dataType: "JSON",
+                success: function (res) {
+                    // console.log(res)
+                    if (res.status) {
+                        // alert("创建成功");
+                        // 清空表单数据
+                        $('#formAdd')[0].reset();
+                        // 关闭对话框
+                        $('#newOrder').modal('hide');
+                        // 刷新页面
+                        location.reload();
+                    } else {
+                        if (res.tips) {
+                            alert(res.tips)
                         } else {
                             $.each(res.error, function (k, v) {
                                 $('#id_' + k).next().text(v[0]);
                             })
                         }
                     }
-                })
-            });
+                }
+            })
+        }
+
+        function doAdd() {
+            $.ajax({
+                url: "/order/add/",
+                type: "post",
+                data: $('#formAdd').serialize(),
+                dataType: "JSON",
+                success: function (res) {
+                    // console.log(res)
+                    if (res.status) {
+                        // alert("创建成功");
+                        // 清空表单数据
+                        $('#formAdd')[0].reset();
+                        // 关闭对话框
+                        $('#newOrder').modal('hide');
+                        // 刷新页面
+                        location.reload();
+                    } else {
+                        $.each(res.error, function (k, v) {
+                            $('#id_' + k).next().text(v[0]);
+                        })
+                    }
+                }
+            })
         }
 
         function bindBtnDelEvent() {
@@ -175,8 +214,9 @@
         function bindBtnEditEvent() {
             $('.btn-edit').click(function () {
                 var currentID = $(this).attr('uid')
+                EDIT_ID = currentID;
                 $.ajax({
-                    url: "/order/edit/",
+                    url: "/order/detail/",
                     type: 'get',
                     data: {
                         uid: currentID,
@@ -199,7 +239,6 @@
                         }
                     }
                 })
-                // 获取到数据后显示在对话框中
             })
         }
     </script>
