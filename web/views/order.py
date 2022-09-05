@@ -31,3 +31,9 @@ def order_add(request):
         form.save()
         return JsonResponse({"status": True})
     return JsonResponse({"status": False, "error": form.errors})
+
+
+def order_del(request):
+    uid = request.GET.get("uid")
+    models.Order.objects.filter(id=uid).delete()
+    return JsonResponse({'status': True})

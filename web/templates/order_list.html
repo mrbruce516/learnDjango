@@ -66,7 +66,7 @@
                     <td>{{ obj.get_status_display }}</td>
                     <td>
                         <a class="btn btn-primary btn-xs" href="#">编辑</a>
-                        <input class="btn btn-danger btn-xs btn-del" type="button" value="删除">
+                        <input uid="{{ obj.id }}" class="btn btn-danger btn-xs btn-del" type="button" value="删除">
                     </td>
                 </tr>
             {% endfor %}
@@ -79,7 +79,7 @@
             <div class="alert alert-danger alert-dismissible fade in" role="alert">
                 <h4>是否删除此条数据？</h4>
                 <p style="text-align: right;">
-                    <button type="button" class="btn btn-danger">确 定</button>
+                    <button id="btnConfirmDelete" type="button" class="btn btn-danger">确 定</button>
                     <button type="button" class="btn btn-default" data-dismiss="modal">取 消</button>
                 </p>
             </div>
@@ -94,10 +94,13 @@
 
 {% block js %}
     <script type="text/javascript">
+        var DELETE_ID;
+
         $(function () {
             bindBtnAddEvent();
             bindBtnSaveEvent();
             bindBtnDelEvent();
+            bindBtnConfirmDeleteEvent();
         })
 
         function bindBtnAddEvent() {
@@ -139,6 +142,28 @@
             $('.btn-del').click(function () {
                 // alert("点击了删除");
                 $('#delModal').modal('show');
+
+                // 获取当前行的ID
+                DELETE_ID = $(this).attr("uid");
+            });
+        }
+
+        function bindBtnConfirmDeleteEvent() {
+            $('#btnConfirmDelete').click(function () {
+                // 点击确认删除按钮，将全局变量DELETE_ID 发送到后台
+                $.ajax({
+                    url: "/order/del/",
+                    type: "GET",
+                    data: {
+                        'uid': DELETE_ID
+                    },
+                    dataType: 'JSON',
+                    success: function (res) {
+                        if (res.status) {
+                            location.reload()
+                        }
+                    }
+                })
             });
         }
     </script>
