@@ -6,6 +6,33 @@
             <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
             新建部门
         </a>
+        <!-- 批量添加按钮 -->
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#batch">
+            <span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+            批量添加
+        </button>
+    </div>
+
+    <!-- 批量添加按钮 -->
+    <div class="modal fade" id="batch" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">批量添加</h4>
+                </div>
+                <div class="modal-body">
+                    <form enctype="multipart/form-data">
+                        <input id="file" type="file" name="file">
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button id="btnSave" type="button" class="btn btn-primary">上传</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="panel panel-default">
@@ -40,4 +67,34 @@
     <ul class="pagination" style="float: left;">
         {{ page_number }}
     </ul>
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript">
+        $(function () {
+            bindBtnSaveEvent();
+        })
+
+        function bindBtnSaveEvent() {
+            $("#btnSave").click(function () {
+                var files = $('#file').prop('files');
+                var data = new FormData();
+                data.append('file', files[0]);
+
+                $.ajax({
+                    url: '/depart/batch-add/',
+                    type: 'post',
+                    data: data,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    success: function (res) {
+                        alert(res)
+                        location.reload()
+                    }
+                })
+            })
+        }
+
+    </script>
 {% endblock %}

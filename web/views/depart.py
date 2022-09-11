@@ -1,6 +1,8 @@
 # 部门管理视图
-
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.views.decorators.csrf import csrf_exempt
+from openpyxl import load_workbook
 from web import models
 from web.utils.pagination import Pagination
 from web.utils.search import Search
@@ -75,3 +77,21 @@ def depart_edit(request, nid):
             'form': form
         }
         return render(request, "edit.html", context)
+
+
+@csrf_exempt
+def depart_batch_add(request):
+    # 获取excel文件
+    file_obj = request.FILES.get('file')
+    # 把用户的excel文件读到内存中
+    wb = load_workbook(file_obj)
+    sheet = wb.worksheets[0]
+    # 循环获取每一行数据
+    for row in sheet.iter_rows(min_row=2):
+        data = row[0].value
+        # 添加到数据库
+        exists = models.Department.objects.filter(title=data).exists()
+        if not exists:
+            models.Department.objects.create(title=data)
+        return HttpResponse("数据重复，添加失败")
+    return HttpResponse("上传成功")

@@ -21,6 +21,7 @@ urlpatterns = [
     # 部门管理
     path('depart/list/', depart.depart_list),
     path('depart/add/', depart.depart_add),
+    path('depart/batch-add/', depart.depart_batch_add),
     path('depart/del/', depart.depart_del),
     path('depart/<uuid:nid>/edit/', depart.depart_edit),
 
