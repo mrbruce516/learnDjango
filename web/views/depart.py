@@ -39,7 +39,7 @@ def depart_add(request):
         }
         return render(request, 'add.html', context)
 
-    form = DepartModelForm(data=request.POST)
+    form = DepartModelForm(data=request.POST, files=request.FILES)
     context = {
         'title': "新增部门",
         'form': form
@@ -67,7 +67,7 @@ def depart_edit(request, nid):
         return render(request, "edit.html", context)
 
     # 获取数据并更新
-    form = DepartModelForm(data=request.POST, instance=row_obj)
+    form = DepartModelForm(data=request.POST, instance=row_obj, files=request.FILES)
     if form.is_valid():
         form.save()
         return redirect('/depart/list/')

@@ -2,7 +2,7 @@ import os
 from django.shortcuts import render
 from django.http import HttpResponse
 from web import models
-from web.utils.form import UploadForm
+from web.utils.form import UploadForm, UploadModelForm
 
 
 def upload_list(request):
@@ -32,9 +32,8 @@ def upload_form(request):
     if form.is_valid():
         # 1. 读取文件名，写入文件夹并获取写入路径
         avatar_obj = form.cleaned_data.get("avatar")
-        db_file_path = os.path.join("static", "img", "avatar", avatar_obj.name)
-        file_path = os.path.join("web", db_file_path)
-        f = open(file_path, mode='wb')
+        media_path = os.path.join("media", "avatar", avatar_obj.name)
+        f = open(media_path, mode='wb')
         for chunk in avatar_obj.chunks():
             f.write(chunk)
         f.close()
@@ -43,7 +42,7 @@ def upload_form(request):
         models.Avatar.objects.create(
             name=form.cleaned_data['name'],
             age=form.cleaned_data['age'],
-            avatar=db_file_path
+            avatar=media_path
         )
         return HttpResponse("添加成功")
 
@@ -52,3 +51,24 @@ def upload_form(request):
         'form': form
     }
     return render(request, 'upload_form.html', context)
+
+
+def upload_modelform(request):
+    title = "ModelForm上传"
+    if request.method == 'GET':
+        form = UploadModelForm()
+        context = {
+            'title': title,
+            'form': form
+        }
+        return render(request, 'upload_modelform.html', context)
+    form = UploadModelForm(data=request.POST, files=request.FILES)
+    if form.is_valid():
+        form.save()
+        return HttpResponse("上传成功")
+    context = {
+        'title': title,
+        'form': form
+    }
+    return render(request, 'upload_modelform.html', context)
+

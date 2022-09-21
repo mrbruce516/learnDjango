@@ -46,6 +46,7 @@
             <thead>
             <tr>
                 <th>序号</th>
+                <th>logo</th>
                 <th>部门名称</th>
                 <th>操作</th>
             </tr>
@@ -54,6 +55,9 @@
             {% for obj in depart %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
+                    <td>
+                        <img src="/media/{{ obj.logo }}" height="50px">
+                    </td>
                     <td>{{ obj.title }}</td>
                     <td>
                         <a class="btn btn-primary btn-xs" href="/depart/{{ obj.id }}/edit/">编辑</a>

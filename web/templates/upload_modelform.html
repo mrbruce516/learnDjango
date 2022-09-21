@@ -1,4 +1,3 @@
-<!-- 新建数据公共组件 /-->
 {% extends 'layout.html' %}
 {% load static %}
 
@@ -25,19 +24,4 @@
             </form>
         </div>
     </div>
-{% endblock %}
-
-{% block js %}
-    <script src="{% static 'plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js' %}"></script>
-    <script src="{% static 'plugins/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js' %}"></script>
-    <script>
-        $(function () {
-            $('#id_create_time').datepicker({
-                format: 'yyyy-mm-dd',
-                startDate: '0',
-                language: 'zh-CN',
-                autoclose: true
-            });
-        })
-    </script>
 {% endblock %}

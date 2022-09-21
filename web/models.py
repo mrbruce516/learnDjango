@@ -9,6 +9,7 @@ class Department(models.Model):
     """ 部门表 """
     id = models.UUIDField(verbose_name="id", primary_key=True, default=uuid.uuid4, editable=False, unique=True)
     title = models.CharField(verbose_name="部门名称", max_length=32)
+    logo = models.FileField(verbose_name="logo", max_length=128, upload_to='depart_logo')
 
     def __str__(self):
         return self.title
@@ -91,4 +92,4 @@ class Avatar(models.Model):
     id = models.UUIDField(verbose_name="id", primary_key=True, default=uuid.uuid4, editable=False, unique=True)
     name = models.CharField(verbose_name="姓名", max_length=32)
     age = models.PositiveSmallIntegerField(verbose_name="年龄")
-    avatar = models.FileField(verbose_name="头像", max_length=128)
+    avatar = models.FileField(verbose_name="头像", max_length=128, upload_to='avatar/')

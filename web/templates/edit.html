@@ -12,7 +12,7 @@
             <h3 class="panel-title">{{ title }}</h3>
         </div>
         <div class="panel-body">
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {% for fields in form %}
                     <div class="form-group">

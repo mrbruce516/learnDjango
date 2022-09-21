@@ -7,12 +7,13 @@ from web.utils.bootstrap import BootStrapForm, BootStrapModelForm
 
 
 class DepartModelForm(BootStrapModelForm):
+    exclude_fields = ['logo']
     """部门表单"""
     title = forms.CharField(min_length=3, label='部门名称')
 
     class Meta:
         model = models.Department
-        fields = ["title"]
+        fields = "__all__"
 
 
 class UserModelForm(BootStrapModelForm):
@@ -179,3 +180,11 @@ class UploadForm(BootStrapForm):
     name = forms.CharField(label="姓名")
     age = forms.CharField(label="年龄")
     avatar = forms.FileField(label="头像")
+
+
+class UploadModelForm(BootStrapModelForm):
+    exclude_fields = ["avatar"]
+
+    class Meta:
+        model = models.Avatar
+        fields = "__all__"

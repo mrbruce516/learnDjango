@@ -14,10 +14,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, re_path
+from django.views.static import serve
+from django.conf import settings
 from web.views import depart, user, pnum, task, order, chart, upload
 
 urlpatterns = [
+    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}, name='media'),
+
     # 部门管理
     path('depart/list/', depart.depart_list),
     path('depart/add/', depart.depart_add),
@@ -60,4 +64,5 @@ urlpatterns = [
     # 上传文件
     path('upload/list/', upload.upload_list),
     path('upload/form/', upload.upload_form),
+    path('upload/modelform/', upload.upload_modelform),
 ]
