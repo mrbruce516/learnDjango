@@ -84,3 +84,11 @@ class Order(models.Model):
     )
     status = models.PositiveSmallIntegerField(verbose_name="状态", choices=status_choice, default=2)
     user = models.ForeignKey(verbose_name="用户", to=UserInfo, on_delete=models.CASCADE)
+
+
+class Avatar(models.Model):
+    """ 混合上传（表单数据与文件） """
+    id = models.UUIDField(verbose_name="id", primary_key=True, default=uuid.uuid4, editable=False, unique=True)
+    name = models.CharField(verbose_name="姓名", max_length=32)
+    age = models.PositiveSmallIntegerField(verbose_name="年龄")
+    avatar = models.FileField(verbose_name="头像", max_length=128)

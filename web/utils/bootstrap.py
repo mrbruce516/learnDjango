@@ -13,11 +13,15 @@ class xxx(BootStrapModelForm):
 from django import forms
 
 
-class BootStrapModelForm(forms.ModelForm):
+class BootStrap:
+    exclude_fields = []
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         # 循环ModelForm中的所有字段，给每个字段设置插件
         for name, field, in self.fields.items():
+            if name in self.exclude_fields:
+                continue
             # 字段中有属性的话，保留原来的属性，再添加
             if field.widget.attrs:
                 field.widget.attrs["class"] = "form-control"
@@ -28,3 +32,11 @@ class BootStrapModelForm(forms.ModelForm):
                     "class": "form-control",
                     "placeholder": field.label
                 }
+
+
+class BootStrapModelForm(BootStrap, forms.ModelForm):
+    pass
+
+
+class BootStrapForm(BootStrap, forms.Form):
+    pass

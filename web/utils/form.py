@@ -3,7 +3,7 @@ from django.core.validators import RegexValidator
 from django.core.validators import ValidationError
 from web import models
 from web.utils.encrpty import md5
-from web.utils.bsmodelform import BootStrapModelForm
+from web.utils.bootstrap import BootStrapForm, BootStrapModelForm
 
 
 class DepartModelForm(BootStrapModelForm):
@@ -129,6 +129,7 @@ class PnumEditModelForm(BootStrapModelForm):
 
 """
 登陆校验功能(form版本)
+
     class LoginForm(forms.Form):
     username = forms.CharField(
         label="用户名",
@@ -171,3 +172,10 @@ class OrderModelForm(BootStrapModelForm):
         model = models.Order
         # fields = "__all__"
         exclude = ["oid", "user"]
+
+
+class UploadForm(BootStrapForm):
+    exclude_fields = ['avatar']
+    name = forms.CharField(label="姓名")
+    age = forms.CharField(label="年龄")
+    avatar = forms.FileField(label="头像")
